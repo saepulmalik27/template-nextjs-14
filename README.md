@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Template Nextjs 14 (typescript, tailwindcss, jest, rtl, eslint, prettier, husky, lint-staged, commitlint, commitizen)
 
-## Getting Started
+project ini menggunakan [Next.js](https://nextjs.org/) 14 project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) dan tambahan tools yang sering gua pake saat setup project nextjs
 
-First, run the development server:
+## Cara Install
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. jalankan command `npx create-next-app@latest`
+2. install _husky_ `npx husky-init && yarn` dan jalankan command `yarn prepare`
+3. install _prettier_ ` yarn add -D prettier eslint-config-prettier eslint-plugin-prettier prettier-plugin-tailwindcss`
+4. setup file `.eslintrc.json`
+
+```
+{
+  "extends": ["next/core-web-vitals", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier":[ "warn",
+    {
+      "endOfLine": "auto"
+    }]
+  }
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. add .prettierrc.json file `touch .prettierrc.json` di root project, dan tambahkan code dibawah
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+{
+  "trailingComma": "es5",
+  "semi": true,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
 
-## Learn More
+6. install lint-staged `yarn add -D lint-staged`
+7. tambahkan script ini di _`package.json`_
 
-To learn more about Next.js, take a look at the following resources:
+```
+scripts : {
+    ...
+    "lint-staged": "lint-staged",
+    "type-check": "tsc --project tsconfig.json --pretty --noEmit && echo ",
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+8. add file .lintstagedrc.js di root project `touch .lintstagedrc.json` dan tambahkan code dibawah
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```
+module.exports = {
+  // Run type-check on changes to TypeScript files
+  '**/*.ts?(x)': () => 'yarn type-check',
+  // Lint & Prettify TS and JS files
+  '**/*.(ts|tsx|js|mjs)': (filenames) => [
+    `yarn lint . ${filenames.join(' ')}`,
+    `yarn prettier --write ${filenames.join(' ')}`,
+  ],
+  // Prettify only Markdown and JSON files
+  '**/*.(md|json)': filenames => `yarn prettier --write ${filenames.join(' ')}`
+};
 
-## Deploy on Vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+9. Ganti `yarn test` di file .husky/pre-commit `yarn lint-staged`
+10. add commitlint `yarn add -D @commitlint/config-conventional @commitlint/cli` add file commitlint.config.js `touch commitlint.config.js`
+11. add commitizen `yarn add -D commitizen` dan tambahkan file .cz.json di root project `touch .cz.json`dan tambahkan code dibawah
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+{
+  "path": "cz-conventional-changelog"
+}
+```
+
+12. add commit-msg `npx husky add .husky/commit-msg 'npx --no-install commitlint --edit "$1"'`
+13. add post-merge `npx husky add .husky/post-merge 'yarn'`
