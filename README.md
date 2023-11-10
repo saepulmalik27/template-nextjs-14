@@ -127,3 +127,10 @@ import "@testing-library/jest-dom";
 ```
 npx husky add .husky/pre-push "yarn test"
 ```
+__test__/home.test.tsx
+
+test('dummy test', () => {
+  expect(true).toBe(true);
+});
+
+```
