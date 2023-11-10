@@ -76,8 +76,9 @@ module.exports = {
 
 12. add commit-msg `npx husky add .husky/commit-msg 'npx --no-install commitlint --edit "$1"'`
 13. add post-merge `npx husky add .husky/post-merge 'yarn'`
-14. add jest rtl ```-D @types/jest jest jest-environment-jsdom @testing-library/react @testing-library/jest-dom ```
+14. add jest rtl `-D @types/jest jest jest-environment-jsdom @testing-library/react @testing-library/jest-dom `
 15. add jest.config.mjs `touch jest.config.mjs`
+
 ```
 import nextJest from "next/jest.js";
 
@@ -99,22 +100,30 @@ const config = {
 
 export default createJestConfig(config);
 ```
-15. tambahkan file jest.setup.js di root project `touch jest.setup.js` 
+
+15. tambahkan file jest.setup.js di root project `touch jest.setup.js`
+
 ```
 import "@testing-library/jest-dom";
 ```
+
 16. Update tsconfig file with
+
 ```
 "include": [ "jest.setup.js"]
 ```
+
 17. Update package.json with new test scripts
+
 ```
 {
   "test": "jest --coverage",
   "test:w": "jest --watch"
 }
 ```
-18. ***optional*** setup husky to support testing on push, add folder __test__
+
+18. **_optional_** setup husky to support testing on push, add folder **test**
+
 ```
 npx husky add .husky/pre-push "yarn test"
 ```
